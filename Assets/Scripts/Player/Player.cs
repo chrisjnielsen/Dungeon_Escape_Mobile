@@ -2,24 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour, IDamageable
 {
-
+    public int diamonds;
+    private PlayerControls playerInput;
     private Rigidbody2D _rb;
     [SerializeField]
-    private float _speed;
+    private float _speed, _horizontalInput;
     [SerializeField]
     private float _jumpForce = 5f;
     [SerializeField]
     private LayerMask _layer;
     private bool _resetJumpNeeded = false;
-    private bool _grounded;
     private PlayerAnimation _anim;
     private SpriteRenderer _sprite;
     private SpriteRenderer _swordArcSprite;
-
     public int Health { get; set; }
 
+    private void Awake()
+    {
+        playerInput = new PlayerControls();
+    }
+
+    private void OnEnable()
+    {
+        playerInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Disable();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,57 +42,60 @@ public class Player : MonoBehaviour, IDamageable
         _anim = GetComponent<PlayerAnimation>();
         _sprite = GetComponentInChildren<SpriteRenderer>();
         _swordArcSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        Health = 4;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
 
-        if(Input.GetMouseButtonDown(0) && IsGrounded())
+        if (playerInput.PlayerMain.Attack.triggered && IsGrounded())
         {
             _anim.Attack();
         }
     }
 
     void Movement()
-    {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        _anim.Move(horizontalInput);
-        _grounded = IsGrounded();
+    { 
+        Vector2 movementInput = playerInput.PlayerMain.Movement.ReadValue<Vector2>();
+        _horizontalInput = movementInput.x;
+        if (IsGrounded())
+        {
+            movementInput.y = 0;
+        }
 
-        if (horizontalInput > 0)
+        _anim.Move(_horizontalInput);
+
+        if (_horizontalInput > 0)
         {
             Flip(true);
         }
-        else if (horizontalInput < 0)
+        else if (_horizontalInput < 0)
         {
             Flip(false);
         }
-        
-        
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {     
+        if (playerInput.PlayerMain.Jump.triggered && IsGrounded())
+        {
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
             _anim.Jump(true);
             StartCoroutine(ResetJumpRoutine());
         }
 
-        _rb.velocity = new Vector2(horizontalInput * _speed, _rb.velocity.y);
+        _rb.velocity = new Vector2(movementInput.x * _speed, _rb.velocity.y);
     }
 
     IEnumerator ResetJumpRoutine()
     {
         _resetJumpNeeded = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         _resetJumpNeeded = false;
     }
 
     bool IsGrounded()
     {
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 0.8f, _layer);
-        //Debug.DrawRay(transform.position, Vector2.down, Color.green);
+        Debug.DrawRay(transform.position, Vector2.down, Color.green);
         if(hitInfo.collider != null)
         {
             if (_resetJumpNeeded == false)
@@ -117,9 +134,23 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Damage()
     {
-        Debug.Log("Player Damage() called");
+        if(Health < 1)
+        {
+            return;
+        }
+        Health--;
+        UIManager.Instance.UpdateLives(Health);
+        if (Health < 1)
+        {
+            _anim.Death();
+        }
     }
 
+    public void AddGems(int amount)
+    {
+        diamonds += amount;
+        UIManager.Instance.UpdateGemCount(diamonds);
+    }
 }
 
 

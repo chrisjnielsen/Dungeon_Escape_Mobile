@@ -16,7 +16,7 @@ public class MossGiant : Enemy, IDamageable
 
     public void Damage()
     {
-        Debug.Log("Moss Giant Damage");
+        if (isDead == true) return;
         Health--;
         anim.SetTrigger("Hit");
         isHit = true;
@@ -25,6 +25,10 @@ public class MossGiant : Enemy, IDamageable
         {
             isDead = true;
             anim.SetTrigger("Death");
+            GameObject diamond = Instantiate(diamondPrefab, transform.position, Quaternion.identity) as GameObject;
+            diamond.GetComponent<Diamond>().gems = base.gems;
+            //spawn a diamond
+            //change value of diamond to whatever my gem count is
             
         }
     }

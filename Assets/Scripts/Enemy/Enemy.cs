@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+
+    public GameObject diamondPrefab;
+
     [SerializeField]
     protected int health, speed, gems;
     [SerializeField]
@@ -68,17 +71,14 @@ public class Enemy : MonoBehaviour
         }
 
         Vector3 direction = player.transform.localPosition - transform.localPosition;
-        //Debug.Log("Side: " + transform.name + " "+ direction.x);
 
         if (direction.x > 0 && anim.GetBool("InCombat") == true)
         {
-            //face right
             sprite.flipX = false;
         }
 
         else if (direction.x < 0 && anim.GetBool("InCombat") == true)
         {
-            // face left
             sprite.flipX = true;
         }
         
