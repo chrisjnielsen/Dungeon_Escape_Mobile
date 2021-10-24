@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     public Image selectionImg;
     public Text gemCountText;
     public Image[] healthBars;
+    [SerializeField]
+    private Text _unityAdText;
 
     private void Awake()
     {
@@ -59,5 +61,4 @@ public class UIManager : MonoBehaviour
         //if i=lives remaining
         // hide subtracted lives
     }
-   
 }

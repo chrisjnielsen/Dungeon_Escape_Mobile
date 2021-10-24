@@ -1,29 +1,29 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
+using System.Collections;
 
 public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsListener, IUnityAdsInitializationListener
 {
     [SerializeField] Button _showAdButton;
     [SerializeField] string _androidAdUnitId = "Rewarded_Android";
-    [SerializeField] string _iOsAdUnitId = "Rewarded_iOS";
-    string _adUnitId;
+    //[SerializeField] string _iOsAdUnitId = "Rewarded_iOS";
+    public string _adUnitId;
+    private Timer _time;
+    private bool _timerRunning;
+    public float _adWatchTime;    
 
     void Awake()
     {
-        // Get the Ad Unit ID for the current platform:
-        //_adUnitId = (Application.platform == RuntimePlatform.IPhonePlayer)
-        //    ? _iOsAdUnitId
-        //    : _androidAdUnitId;
         _adUnitId = _androidAdUnitId;
         Advertisement.AddListener(this);
-        //Disable button until ad is ready to show
-        _showAdButton.interactable = false;
-        }
+        _time = GameObject.FindGameObjectWithTag("Timer").GetComponent<Timer>();
+    }
 
     // Load content to the Ad Unit:
     public void LoadAd()
     {
+        _adWatchTime = 0;
         // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
         Debug.Log("Loading Ad: " + _adUnitId);
         Advertisement.Load(_adUnitId, this);
@@ -33,11 +33,11 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
     public void OnUnityAdsAdLoaded(string adUnitId)
     {
         Debug.Log("Ad Loaded: " + adUnitId);
-
         if (adUnitId.Equals(_adUnitId))
         {
             // Configure the button to call the ShowAd() method when clicked:
             _showAdButton.onClick.AddListener(ShowAd);
+            
             // Enable the button for users to click:
             _showAdButton.interactable = true;
         }
@@ -55,13 +55,12 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
     // Implement the Show Listener's OnUnityAdsShowComplete callback method to determine if the user gets a reward:
     public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
     {
+        _adWatchTime += Time.deltaTime;
         if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
         {
             Debug.Log("Unity Ads Rewarded Ad Completed");
-            // Grant a reward.
-
-            // Load another ad:
-            Advertisement.Load(_adUnitId, this);
+            GameManager.Instance.Player.AddGems(100);
+            UIManager.Instance.OpenShop(GameManager.Instance.Player.diamonds);
         }
     }
 
@@ -78,7 +77,10 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
         // Use the error details to determine whether to try to load another ad.
     }
 
-    public void OnUnityAdsShowStart(string adUnitId) { }
+    public void OnUnityAdsShowStart(string adUnitId) 
+    {
+        
+    }
     public void OnUnityAdsShowClick(string adUnitId) { }
 
     void OnDestroy()
@@ -108,6 +110,7 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         Debug.Log("Ad Finished");
+        StartCoroutine(WaitforNewAds());
     }
 
     public void OnInitializationComplete()
@@ -119,5 +122,30 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)
     {
         Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+    }
+
+    public bool TimerRunning(bool timer)
+    {
+        return _timerRunning = timer;
+    }
+
+   IEnumerator WaitforNewAds()
+    {
+        Debug.Log("Run Coroutine");
+        float waitforAd = 20f - _adWatchTime;
+        Debug.Log(waitforAd);
+        if (waitforAd > 0) 
+        {
+            _time.ChangeAdDisplay(20f - _adWatchTime);
+            yield return new WaitForSeconds(20f - _adWatchTime);
+            Debug.Log("LoadAd called");
+            LoadAd();
+        }
+        else
+        {
+            _time.ChangeAdDisplay(0);
+            yield return new WaitForSeconds(0.5f);   
+            LoadAd();
+        }  
     }
 }

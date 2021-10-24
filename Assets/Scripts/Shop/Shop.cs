@@ -1,25 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
 
     public GameObject shopPanel;
+    public GameObject adButton;
+    public Text adButtonText;
     public int currentSelectedItem;
     public int currentItemCost;
     private Player _player;
+    public int count;
+
+    private void Start()
+    {
+        count = 0;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
         {
+            
              _player = other.GetComponent<Player>();
             if (_player != null)
             {
                 UIManager.Instance.OpenShop(_player.diamonds);
             }
             shopPanel.SetActive(true);
+            if (count == 0)
+            {
+                adButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                adButton.GetComponent<Button>().image.enabled = true;
+                adButtonText.enabled = true;
+            }
         }
     }
 
@@ -27,7 +46,10 @@ public class Shop : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            count++;
             shopPanel.SetActive(false);
+            adButton.GetComponent<Button>().image.enabled = false;
+            adButtonText.enabled = false;
         }
     }
 
@@ -60,7 +82,6 @@ public class Shop : MonoBehaviour
             default:
                 break;
         }
-
     }
 
     public void BuyItem()
@@ -82,12 +103,5 @@ public class Shop : MonoBehaviour
             Debug.Log("You do not have enough gems. Closing shop");
             shopPanel.SetActive(false);
         }
-
     }
-
-    //BuyItem Method
-    //check if player gems is greater than or equal to itemCost
-    //if it is, then awarditem (subtract cost from players gems)
-    //else cancel sale
-
 }

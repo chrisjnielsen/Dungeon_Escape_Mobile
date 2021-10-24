@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - UI
+  - Timer
+  - AdButton
   layers:
   - Default
   - TransparentFX
