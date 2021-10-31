@@ -10,9 +10,12 @@ public class Shop : MonoBehaviour
     public GameObject adButton;
     public Text adButtonText;
     public int currentSelectedItem;
-    public int currentItemCost;
+    public int currentItemCost = 0;
     private Player _player;
     public int count;
+    private bool buySword = false;
+    private bool buyBoots = false;
+    private bool buyKey = false;
 
     private void Start()
     {
@@ -58,7 +61,7 @@ public class Shop : MonoBehaviour
         //0 = flame sword
         //1 = boots of flight
         //2 = key to castle
-        Debug.Log("Button Selected");
+        //Debug.Log("Button Selected");
 
         //switch between item
 
@@ -88,15 +91,35 @@ public class Shop : MonoBehaviour
     {
         if (_player.diamonds >= currentItemCost)
         {
+            
             //award item
-            if (currentSelectedItem == 2)
+            if (currentSelectedItem == 0 && buySword ==false)
             {
-                GameManager.Instance.HasKeyToCastle = true;
+                //Debug.Log(_player.diamonds);
+                GameManager.Instance.HasFlameSword = true;
+                buySword = true;
+                _player.diamonds -= currentItemCost;
+                _player.SwordArcOn();
             }
-            _player.diamonds -= currentItemCost;
-            Debug.Log("Purchased: " + currentSelectedItem);
-            Debug.Log("Remaining Gems: " + _player.diamonds);
+            else if (currentSelectedItem == 1 && buyBoots == false)
+            {
+                //Debug.Log(_player.diamonds);
+                GameManager.Instance.HasBootsofFlight = true;
+                buyBoots = true;
+                _player.diamonds -= currentItemCost;
+                _player.BootsActive();
+            }
+            else if (currentSelectedItem == 2 && buyKey == false)
+            {
+                //Debug.Log(_player.diamonds);
+                GameManager.Instance.HasKeyToCastle = true;
+                buyKey = true;
+                _player.diamonds -= currentItemCost;
+                UIManager.Instance.StatusMessage(4);
+            }
+
             UIManager.Instance.OpenShop(_player.diamonds);
+            UIManager.Instance.UpdateGemCount(_player.diamonds);
         }
         else
         {

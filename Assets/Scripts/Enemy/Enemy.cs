@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 
     protected bool isHit = false;
     protected bool isDead = false;
+    protected bool isMoving = true;
 
     protected Player player;
 
@@ -51,16 +52,19 @@ public class Enemy : MonoBehaviour
         {
             currentTarget = pointB.position;
             anim.SetTrigger("Idle");
+            isMoving = false;
         }
         else if (transform.position == pointB.position)
         {
             currentTarget = pointA.position;
             anim.SetTrigger("Idle");
+            isMoving = false;
         }
 
         if (isHit == false)
         {
             transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+            isMoving = true;
         }
 
         float distance = Vector3.Distance(transform.localPosition, player.transform.localPosition);

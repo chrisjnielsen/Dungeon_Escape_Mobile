@@ -18,7 +18,13 @@ public class Player : MonoBehaviour, IDamageable
     private PlayerAnimation _anim;
     private SpriteRenderer _sprite;
     private SpriteRenderer _swordArcSprite;
+
+    private bool isMoving;
     public int Health { get; set; }
+
+    private AudioSource _audioSource;
+    
+
 
     private void Awake()
     {
@@ -42,12 +48,23 @@ public class Player : MonoBehaviour, IDamageable
         _anim = GetComponent<PlayerAnimation>();
         _sprite = GetComponentInChildren<SpriteRenderer>();
         _swordArcSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _swordArcSprite.gameObject.SetActive(false);
         Health = 4;
+        UIManager.Instance.OpenShop(diamonds);
+        UIManager.Instance.UpdateGemCount(diamonds);
+        _audioSource = GameObject.Find("Sound_1_WalkPlayer").GetComponent<AudioSource>();
     }
 
     void Update()
     {
         Movement();
+        if (_horizontalInput != 0) isMoving = true;
+        else isMoving = false;
+        if (isMoving)
+        {
+            if (!_audioSource.isPlaying) GameManager.Instance.WalkPlayer();
+        }
+        else AudioManager.instance.StopSound("WalkPlayer");
 
         if (playerInput.PlayerMain.Attack.triggered && IsGrounded())
         {
@@ -59,6 +76,7 @@ public class Player : MonoBehaviour, IDamageable
     { 
         Vector2 movementInput = playerInput.PlayerMain.Movement.ReadValue<Vector2>();
         _horizontalInput = movementInput.x;
+        
         if (IsGrounded())
         {
             movementInput.y = 0;
@@ -150,7 +168,20 @@ public class Player : MonoBehaviour, IDamageable
     {
         diamonds += amount;
         UIManager.Instance.UpdateGemCount(diamonds);
+        UIManager.Instance.OpenShop(diamonds);
     }
+
+    public void SwordArcOn()
+    {
+        _swordArcSprite.gameObject.SetActive(true);
+    }
+
+    public void BootsActive()
+    {
+        _jumpForce=10;
+    }
+
+
 }
 
 

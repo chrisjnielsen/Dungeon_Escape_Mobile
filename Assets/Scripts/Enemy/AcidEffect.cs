@@ -11,6 +11,7 @@ public class AcidEffect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManager.Instance.SpiderSound();
         Destroy(this.gameObject, 5f);
     }
 

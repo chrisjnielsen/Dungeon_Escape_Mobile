@@ -8,6 +8,7 @@ TagManager:
   - UI
   - Timer
   - AdButton
+  - ShopPanel
   layers:
   - Default
   - TransparentFX

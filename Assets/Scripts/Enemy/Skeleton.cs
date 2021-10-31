@@ -12,15 +12,29 @@ public class Skeleton : Enemy, IDamageable
         base.Init();
         //assign health property to our enemy health
         Health = base.health;
+        GameManager.Instance.SkeletonSound();
     }
-   
+
+    public override void Update()
+    {
+        base.Update();
+    }
 
     public void Damage()
     {
         if (isDead == true) return;
-        Health--;
-        anim.SetTrigger("Hit");
-        isHit = true;
+        if (GameManager.Instance.HasFlameSword == true)
+        {
+            Health--;
+            anim.SetTrigger("Hit");
+            isHit = true;
+        }
+        else
+        {
+            //UI message that player needs a stronger sword
+            UIManager.Instance.StatusMessage(1);
+        }
+        
         anim.SetBool("InCombat", true);
         if (Health < 1) 
         {

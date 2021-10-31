@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6125296329996374621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3762747690697778607}
+  - component: {fileID: 7335523057177073476}
+  m_Layer: 0
+  m_Name: Audio_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3762747690697778607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6125296329996374621}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7335523057177073476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6125296329996374621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959e21b8ed598d54e9a3d15ed6bcf4dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: DeathPlayer
+    clip: {fileID: 8300000, guid: 199da85ceacd746f3a3b0cb319f38381, type: 3}
+    volume: 0.658
+    pitch: 1.152
+    randomVolume: 0.147
+    randomPitch: 0.21
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: WalkPlayer
+    clip: {fileID: 8300000, guid: 7d3f2fbebf203b243b551ffcd4f79f06, type: 3}
+    volume: 0.758
+    pitch: 1.5
+    randomVolume: 0.231
+    randomPitch: 0.228
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: AttackPlayer
+    clip: {fileID: 8300000, guid: 43b35ef5b55da4638bdc87a38fa716ea, type: 3}
+    volume: 0.136
+    pitch: 0.979
+    randomVolume: 0.329
+    randomPitch: 0.315
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: JumpPlayer
+    clip: {fileID: 8300000, guid: 2641adadf6a3b4a508a0b56f34fbe85c, type: 3}
+    volume: 0.099
+    pitch: 0.98
+    randomVolume: 0.198
+    randomPitch: 0.225
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: Skeleton
+    clip: {fileID: 8300000, guid: 50c09cf8609cffa4bbf5b38066d8b355, type: 3}
+    volume: 0.238
+    pitch: 0.998
+    randomVolume: 0.1
+    randomPitch: 0.1
+    loop: 1
+    playAwake: 0
+    mute: 0
+  - name: Spider
+    clip: {fileID: 8300000, guid: b17e6d71f8e8449eea617605283797c8, type: 3}
+    volume: 0.118
+    pitch: 1.041
+    randomVolume: 0.1
+    randomPitch: 0.1
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: WalkMossGiant
+    clip: {fileID: 8300000, guid: e1f6cc76e45ef401c8d538cef60801c2, type: 3}
+    volume: 0.099
+    pitch: 0.92
+    randomVolume: 0.201
+    randomPitch: 0.192
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: DeathMonster
+    clip: {fileID: 8300000, guid: 402bfcc88cc76464ab7b15dbca1eeda4, type: 3}
+    volume: 0.371
+    pitch: 1.089
+    randomVolume: 0.258
+    randomPitch: 0.267
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: MouseHover
+    clip: {fileID: 8300000, guid: 9a6dc0dbba8874c7c86062a166792d34, type: 3}
+    volume: 0.281
+    pitch: 1.089
+    randomVolume: 0
+    randomPitch: 0
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: MouseSelect
+    clip: {fileID: 8300000, guid: 24cb67fc3ce0b4435a73b79d1df47a2f, type: 3}
+    volume: 0.257
+    pitch: 1.089
+    randomVolume: 0
+    randomPitch: 0
+    loop: 0
+    playAwake: 0
+    mute: 0
+  - name: Win
+    clip: {fileID: 8300000, guid: dd2766a36059398409f8dc326d12b724, type: 3}
+    volume: 0.178
+    pitch: 1.089
+    randomVolume: 0
+    randomPitch: 0
+    loop: 0
+    playAwake: 0
+    mute: 0
